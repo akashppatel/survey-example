@@ -1,0 +1,15 @@
+@(user: Form[Option[User]])(implicit request: RequestHeader, messages: Messages)
+
+@import helper._
+
+@main("Survey Home : Welcome :)") {
+    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
+
+    @form(CSRF(routes.UserController.index())) {
+    @inputText(user("firstname"))
+    @inputText(user("lastname"))
+    <div class="buttons">
+        <input type="submit" value="Add User"/>
+    </div>
+    }
+}

@@ -12,11 +12,11 @@ lazy val commonSettings = Seq(
 
 val engineDeps = Seq(
   cache,
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.12.1",
   "com.typesafe.play" % "play-slick_2.11" % "2.1.0-M1",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.1.0-M1",
   "mysql" % "mysql-connector-java" % "5.1.38" % Runtime,
   "com.h2database" % "h2" % "1.4.194",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.12.1",
   filters,
   specs2 % Test
 )
