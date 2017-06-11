@@ -2,11 +2,15 @@
 
 @main("S - Home") {
     <h1>Welcome, Fetch user details !!!</h1>
-    <form>
+    @form(routes.UserController.getUser()) {
         <input type="number" name="id" id="id" value="">
         <button type="submit">Get User</button>
+    }
 
-    </form>
+    @form(routes.UserController.getAllUsers()) {
+
+    <button type="submit">Get all User</button>
+    }
 
 
 }

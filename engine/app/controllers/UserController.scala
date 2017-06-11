@@ -4,14 +4,15 @@ import javax.inject.Inject
 
 import dal.UserRepository
 import models.User
-import play.api.data.{Form}
+import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+import views.html.helper.form
 
-
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 /**
   * Created by Admin on 10-06-2017.
@@ -31,9 +32,15 @@ class UserController @Inject() (repo: UserRepository, val messagesApi: MessagesA
     Ok(views.html.userHome())
   }
 
-  def getUser(userId: Int) = Action.async {
+  def getUser() = Action.async {implicit request =>
+    val userId = request.queryString.get("id").flatMap(_.headOption).flatMap(s => Try(s.toInt)toOption)
+    repo.getUser(userId.getOrElse(throw new RuntimeException("No user Id"))).map { user =>
+      Ok(Json.toJson(user))
+    }
+  }
 
-    repo.getUser(userId).map { user =>
+  def getAllUsers() = Action.async {implicit request =>
+    repo.getAllUsers().map { user =>
       Ok(Json.toJson(user))
     }
   }
