@@ -41,4 +41,8 @@ class UserRepository  @Inject()( @NamedDatabase("surveydb") val surveyMongoApi: 
       _.find(Json.obj()).cursor[User]().collect[List](100,  Cursor.FailOnError[List[User]]())
     }
   }
+
+  def updateUser(userId: Int): User = {
+    User(Some(0), Some(""), Some(""), Some(true))
+  }
 }
