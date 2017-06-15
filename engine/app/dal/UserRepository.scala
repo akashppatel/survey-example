@@ -42,7 +42,21 @@ class UserRepository  @Inject()( @NamedDatabase("surveydb") val surveyMongoApi: 
     }
   }
 
-  def updateUser(userId: Int): User = {
-    User(Some(0), Some(""), Some(""), Some(true))
+  def updateUser(user: User): Future[Option[User]] = for {
+    transactions <- userMappingCollection
+    writeResult <- transactions.update(
+      Json.obj("id"->user.id.getOrElse{ throw new RuntimeException("User details does not exist.")}),
+        Json.obj("$set" -> Json.obj("id" -> user.id.getOrElse{ throw new RuntimeException("Incorrect user Id")},
+          "firstname" -> user.firstname,
+          "lastname" -> user.lastname,
+          "active" -> true)))
+  } yield {
+    if (writeResult.ok)
+      Some(user)
+    else {
+      logger.debug(s"DB update error: ${writeResult.errmsg}")
+      None
+    }
   }
+
 }

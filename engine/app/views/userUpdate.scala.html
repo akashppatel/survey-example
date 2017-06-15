@@ -1,0 +1,18 @@
+@(userRequest: Form[User])(implicit request: RequestHeader, messages: Messages)
+
+@import helper._
+
+@main("User Update Form") {
+
+
+<h3>Update user</h3>
+    <div>
+        @form(CSRF(routes.UserController.updateUser())) {
+            @inputText(userRequest("id").copy(value = Some("0")))
+            @inputText(userRequest("firstname").copy(value = Some("A/101")))
+            @inputText(userRequest("lastname").copy(value = Some("Mumbai")))
+
+            <input type="submit" name="updateUser" value="Update user" />
+        }
+    </div>
+}
