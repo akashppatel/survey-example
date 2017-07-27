@@ -10,6 +10,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import play.mvc.Http.RequestHeader
+import utilities.JwtUtility
 import views.html.helper.form
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,7 +19,7 @@ import scala.util.Try
 /**
   * Created by Admin on 10-06-2017.
   */
-class UserController @Inject() (repo: UserRepository, val messagesApi: MessagesApi)
+class UserController @Inject() (auth: SecuredAuthenticator, repo: UserRepository, val messagesApi: MessagesApi)
                                (implicit ec: ExecutionContext) extends Controller with I18nSupport {
   import models.JsonReadWrites._
 
@@ -31,6 +32,16 @@ class UserController @Inject() (repo: UserRepository, val messagesApi: MessagesA
 
   def index() = Action { implicit request =>
     Ok(views.html.userHome())
+  }
+
+
+  def indexAuth = auth.JWTAuthentication { implicit request =>
+    Ok(views.html.indexAuth(s"Hello ${request.userInfo.firstName} ${request.userInfo.lastName}"))
+  }
+
+  def createToken = Action { implicit request =>
+  val payload = """{"id":1,"firstname":"John","lastname":"Doe","active":true}"""
+    Ok(JwtUtility.createToken(payload))
   }
 
   def getUser() = Action.async { implicit request =>

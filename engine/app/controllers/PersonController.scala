@@ -9,12 +9,13 @@ import play.api.data.validation.Constraints._
 import play.api.libs.json.Json
 import models._
 import dal._
+import utilities.JwtUtility
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 import javax.inject._
 
-class PersonController @Inject() (repo: PersonRepository, val messagesApi: MessagesApi)
+class PersonController @Inject() (auth: SecuredAuthenticator, repo: PersonRepository, val messagesApi: MessagesApi)
                                  (implicit ec: ExecutionContext) extends Controller with I18nSupport{
 
   /**
@@ -33,6 +34,7 @@ class PersonController @Inject() (repo: PersonRepository, val messagesApi: Messa
   def index = Action { implicit request =>
     Ok(views.html.index(personForm))
   }
+
 
   /**
    * The add person action.

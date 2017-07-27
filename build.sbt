@@ -1,9 +1,11 @@
 import _root_.sbtassembly.AssemblyPlugin
+import sbt.Keys._
 
 lazy val commonSettings = Seq(
   organization := "com.survey",
   version := "0.1.0",
   scalaVersion := "2.11.11",
+
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", xs@_*) => MergeStrategy.discard
     case x => MergeStrategy.first
@@ -17,6 +19,7 @@ val engineDeps = Seq(
   "mysql" % "mysql-connector-java" % "5.1.38" % Runtime,
   "com.h2database" % "h2" % "1.4.194",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.12.1",
+  "com.jason-goodwin" %% "authentikat-jwt" % "0.4.5",
   filters,
   specs2 % Test
 )
@@ -35,5 +38,7 @@ lazy val engine = (project in file("engine")).
   settings(commonSettings: _*).
   settings(
     name := "engine",
+    resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo),
     libraryDependencies ++= engineDeps
   )
+
